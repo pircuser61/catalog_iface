@@ -40,12 +40,12 @@ func validate(api *Implementation, name, uom, country string) error {
 		return errors.Errorf("bad name <%v>", name)
 	}
 
-	if len(uom) > 10 {
-		return errors.Errorf("bad unit of measure <%v>", uom)
+	if err := validateUnitOfMeasure(uom); err != nil {
+		return err
 	}
 
-	if len(country) < 3 || len(country) > 20 {
-		return errors.Errorf("bad country <%v>", country)
+	if err := validateCountry(country); err != nil {
+		return err
 	}
 	return nil
 }
