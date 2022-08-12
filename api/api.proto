@@ -9,11 +9,11 @@ import "google/protobuf/empty.proto";
 
 
 service catalog {
-  rpc GoodCreate(GoodCreateRequest) returns (google.protobuf.Empty) {}
-  rpc GoodGet(GoodGetRequest) returns (GoodGetResponse) {}
-  rpc GoodList(GoodListRequest) returns (GoodListResponse) {}
-  rpc GoodUpdate(GoodUpdateRequest) returns (google.protobuf.Empty) {}
-  rpc GoodDelete(GoodDeleteRequest) returns (google.protobuf.Empty) {}
+  rpc GoodCreate(stream GoodCreateRequest) returns (stream GoodCreateResponse) {}
+  rpc GoodGet(stream GoodGetRequest) returns (stream GoodGetResponse) {}
+  rpc GoodList(stream GoodListRequest) returns (stream GoodListResponse) {}
+  rpc GoodUpdate(stream GoodUpdateRequest) returns (stream GoodUpdateResponse) {}
+  rpc GoodDelete(stream GoodDeleteRequest) returns (stream GoodDeleteResponse) {}
 
   rpc CountryCreate(CountryCreateRequest) returns (google.protobuf.Empty) {}
   rpc CountryGet(CountryGetRequest) returns (CountryGetResponse) {}
@@ -164,7 +164,12 @@ message GoodCreateRequest {
     string name = 1;
     string unit_of_measure = 2;
     string country = 3;
+    optional string error = 4;
 }
+message GoodCreateResponse {
+    optional string error = 1;
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 // GoodList
@@ -175,7 +180,8 @@ message GoodListRequest{
 }
 message GoodListResponse {
   repeated Good Goods = 1;
-
+  optional string error = 2;
+  
   message Good {
     uint64 code = 1;
     string name = 2;
@@ -189,6 +195,10 @@ message GoodListResponse {
 message GoodUpdateRequest {
     Good good = 1;
 }
+message GoodUpdateResponse {
+    optional string error = 1;
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 // GoodGet
@@ -199,6 +209,7 @@ message GoodGetRequest {
 }
 message GoodGetResponse {
     Good good = 1;
+    optional string error = 4;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -207,6 +218,10 @@ message GoodGetResponse {
 
 message GoodDeleteRequest {
     uint64 code = 1;
+}
+
+message GoodDeleteResponse {
+    optional string error = 1;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

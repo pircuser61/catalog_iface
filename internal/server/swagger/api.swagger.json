@@ -578,6 +578,17 @@
         },
         "country": {
           "type": "string"
+        },
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "apiGoodCreateResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
         }
       }
     },
@@ -590,11 +601,22 @@
         }
       }
     },
+    "apiGoodDeleteResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      }
+    },
     "apiGoodGetResponse": {
       "type": "object",
       "properties": {
         "good": {
           "$ref": "#/definitions/catalogapiGood"
+        },
+        "error": {
+          "type": "string"
         }
       }
     },
@@ -606,6 +628,9 @@
           "items": {
             "$ref": "#/definitions/apiGoodListResponseGood"
           }
+        },
+        "error": {
+          "type": "string"
         }
       }
     },
@@ -626,6 +651,14 @@
       "properties": {
         "good": {
           "$ref": "#/definitions/catalogapiGood"
+        }
+      }
+    },
+    "apiGoodUpdateResponse": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
         }
       }
     },

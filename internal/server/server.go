@@ -18,13 +18,13 @@ import (
 //go:embed swagger/api.swagger.json
 var spec []byte
 
-func RunGRPC() {
+func RunGRPC(ctx context.Context) {
 	listener, err := net.Listen("tcp", config.GrpcAddr)
 	if err != nil {
 		panic(err)
 	}
 
-	apiImplementation, err := apiPkg.New()
+	apiImplementation, err := apiPkg.New(ctx)
 	if err != nil {
 		panic(err)
 	}
