@@ -12,30 +12,30 @@ func (api *Implementation) CountryCreate(ctx context.Context, in *pb.CountryCrea
 	if err := validateCountry(in.GetName()); err != nil {
 		return nil, err
 	}
-	return api.Client.CountryCreate(ctx, in)
+	return api.catalogClient.CountryCreate(ctx, in)
 }
 
 func (api *Implementation) CountryUpdate(ctx context.Context, in *pb.CountryUpdateRequest) (*emptypb.Empty, error) {
 	if err := validateCountry(in.Country.GetName()); err != nil {
 		return nil, err
 	}
-	return api.Client.CountryUpdate(ctx, in)
+	return api.catalogClient.CountryUpdate(ctx, in)
 }
 
 func (api *Implementation) CountryDelete(ctx context.Context, in *pb.CountryDeleteRequest) (*emptypb.Empty, error) {
-	return api.Client.CountryDelete(ctx, in)
+	return api.catalogClient.CountryDelete(ctx, in)
 }
 
 func (api *Implementation) CountryList(ctx context.Context, in *emptypb.Empty) (*pb.CountryListResponse, error) {
-	return api.Client.CountryList(ctx, in)
+	return api.catalogClient.CountryList(ctx, in)
 }
 
 func (api *Implementation) CountryGet(ctx context.Context, in *pb.CountryGetRequest) (*pb.CountryGetResponse, error) {
-	return api.Client.CountryGet(ctx, in)
+	return api.catalogClient.CountryGet(ctx, in)
 }
 
 func (api *Implementation) CountryGetByName(ctx context.Context, in *pb.CountryByNameRequest) (*pb.CountryGetResponse, error) {
-	return api.Client.CountryGetByName(ctx, in)
+	return api.catalogClient.CountryGetByName(ctx, in)
 }
 
 func validateCountry(country string) error {

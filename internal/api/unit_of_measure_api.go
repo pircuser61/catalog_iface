@@ -13,26 +13,26 @@ func (api *Implementation) UnitOfMeasureCreate(ctx context.Context, in *pb.UnitO
 	if err := validateUnitOfMeasure(in.GetName()); err != nil {
 		return nil, err
 	}
-	return api.Client.UnitOfMeasureCreate(ctx, in)
+	return api.catalogClient.UnitOfMeasureCreate(ctx, in)
 }
 
 func (api *Implementation) UnitOfMeasureUpdate(ctx context.Context, in *pb.UnitOfMeasureUpdateRequest) (*emptypb.Empty, error) {
 	if err := validateUnitOfMeasure(in.Unit.GetName()); err != nil {
 		return nil, err
 	}
-	return api.Client.UnitOfMeasureUpdate(ctx, in)
+	return api.catalogClient.UnitOfMeasureUpdate(ctx, in)
 }
 
 func (api *Implementation) UnitOfMeasureDelete(ctx context.Context, in *pb.UnitOfMeasureDeleteRequest) (*emptypb.Empty, error) {
-	return api.Client.UnitOfMeasureDelete(ctx, in)
+	return api.catalogClient.UnitOfMeasureDelete(ctx, in)
 }
 
 func (api *Implementation) UnitOfMeasureList(ctx context.Context, in *emptypb.Empty) (*pb.UnitOfMeasureListResponse, error) {
-	return api.Client.UnitOfMeasureList(ctx, in)
+	return api.catalogClient.UnitOfMeasureList(ctx, in)
 }
 
 func (api *Implementation) UnitOfMeasureGet(ctx context.Context, in *pb.UnitOfMeasureGetRequest) (*pb.UnitOfMeasureGetResponse, error) {
-	return api.Client.UnitOfMeasureGet(ctx, in)
+	return api.catalogClient.UnitOfMeasureGet(ctx, in)
 }
 
 func validateUnitOfMeasure(uom string) error {

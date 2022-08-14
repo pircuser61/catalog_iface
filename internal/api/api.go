@@ -12,8 +12,8 @@ import (
 
 type Implementation struct {
 	pb.UnimplementedCatalogIfaceServer
-	conn   *grpc.ClientConn
-	Client pb.CatalogClient
+	conn          *grpc.ClientConn
+	catalogClient pb.CatalogClient
 
 	goodGet   pb.Catalog_GoodGetClient
 	goodGetMu sync.Mutex
@@ -38,7 +38,7 @@ func New(ctx context.Context) (pb.CatalogIfaceServer, error) {
 	}
 	client := pb.NewCatalogClient(conn)
 
-	api := Implementation{conn: conn, Client: client}
+	api := Implementation{conn: conn, catalogClient: client}
 
 	api.goodGet, err = client.GoodGet(ctx)
 	if err != nil {
