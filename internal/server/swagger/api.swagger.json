@@ -585,12 +585,7 @@
       }
     },
     "apiGoodCreateResponse": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        }
-      }
+      "type": "object"
     },
     "apiGoodDeleteRequest": {
       "type": "object",
@@ -602,21 +597,13 @@
       }
     },
     "apiGoodDeleteResponse": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        }
-      }
+      "type": "object"
     },
     "apiGoodGetResponse": {
       "type": "object",
       "properties": {
         "good": {
           "$ref": "#/definitions/catalogapiGood"
-        },
-        "error": {
-          "type": "string"
         }
       }
     },
@@ -655,12 +642,7 @@
       }
     },
     "apiGoodUpdateResponse": {
-      "type": "object",
-      "properties": {
-        "error": {
-          "type": "string"
-        }
-      }
+      "type": "object"
     },
     "apiUnitOfMeasure": {
       "type": "object",

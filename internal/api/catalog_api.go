@@ -12,57 +12,32 @@ func (api *Implementation) GoodCreate(ctx context.Context, in *pb.GoodCreateRequ
 	if err := validate(api, in.GetName(), in.GetUnitOfMeasure(), in.GetCountry()); err != nil {
 		return nil, err
 	}
-
-	api.goodCreateMu.Lock()
-	defer api.goodCreateMu.Unlock()
-
-	if err := api.goodCreate.Send(in); err != nil {
+	if _, err := api.catalogClient.GoodCreate(ctx, in); err != nil {
 		return nil, err
-	}
-
-	result, err := api.goodCreate.Recv()
-	if err != nil {
-		return nil, err
-	}
-	if result.Error != nil {
-		return nil, errors.New(*result.Error)
 	}
 	return &emptypb.Empty{}, nil
 }
 
 func (api *Implementation) GoodUpdate(ctx context.Context, in *pb.GoodUpdateRequest) (*emptypb.Empty, error) {
-	api.goodUpdateMu.Lock()
-	defer api.goodUpdateMu.Unlock()
+	if err := validate(api, in.Good.GetName(), in.Good.GetUnitOfMeasure(), in.Good.GetCountry()); err != nil {
+		return nil, err
 
-	if err := api.goodUpdate.Send(in); err != nil {
-		return nil, err
 	}
-	result, err := api.goodUpdate.Recv()
-	if err != nil {
+	if _, err := api.catalogClient.GoodUpdate(ctx, in); err != nil {
 		return nil, err
-	}
-	if result.Error != nil {
-		return nil, errors.New(*result.Error)
 	}
 	return &emptypb.Empty{}, nil
 }
 
 func (api *Implementation) GoodDelete(ctx context.Context, in *pb.GoodDeleteRequest) (*emptypb.Empty, error) {
-	api.goodDeleteMu.Lock()
-	defer api.goodDeleteMu.Unlock()
-
-	if err := api.goodDelete.Send(in); err != nil {
+	if _, err := api.catalogClient.GoodDelete(ctx, in); err != nil {
 		return nil, err
-	}
-
-	result, err := api.goodDelete.Recv()
-	if err != nil {
-		return nil, err
-	}
-	if result.Error != nil {
-		return nil, errors.New(*result.Error)
 	}
 	return &emptypb.Empty{}, nil
+}
+
+func (api *Implementation) GoodGet(ctx context.Context, in *pb.GoodGetRequest) (*pb.GoodGetResponse, error) {
+	return api.catalogClient.GoodGet(ctx, in)
 }
 
 func (api *Implementation) GoodList(ctx context.Context, in *pb.GoodListRequest) (*pb.GoodListResponse, error) {
@@ -81,16 +56,6 @@ func (api *Implementation) GoodList(ctx context.Context, in *pb.GoodListRequest)
 		return nil, errors.New(*result.Error)
 	}
 	return result, nil
-}
-
-func (api *Implementation) GoodGet(ctx context.Context, in *pb.GoodGetRequest) (*pb.GoodGetResponse, error) {
-	api.goodGetMu.Lock()
-	defer api.goodGetMu.Unlock()
-
-	if err := api.goodGet.Send(in); err != nil {
-		return nil, err
-	}
-	return api.goodGet.Recv()
 }
 
 func validate(api *Implementation, name, uom, country string) error {

@@ -15,20 +15,8 @@ type Implementation struct {
 	conn          *grpc.ClientConn
 	catalogClient pb.CatalogClient
 
-	goodGet   pb.Catalog_GoodGetClient
-	goodGetMu sync.Mutex
-
 	goodList   pb.Catalog_GoodListClient
 	goodListMu sync.Mutex
-
-	goodCreate   pb.Catalog_GoodCreateClient
-	goodCreateMu sync.Mutex
-
-	goodUpdate   pb.Catalog_GoodUpdateClient
-	goodUpdateMu sync.Mutex
-
-	goodDelete   pb.Catalog_GoodDeleteClient
-	goodDeleteMu sync.Mutex
 }
 
 func New(ctx context.Context) (pb.CatalogIfaceServer, error) {
@@ -40,27 +28,7 @@ func New(ctx context.Context) (pb.CatalogIfaceServer, error) {
 
 	api := Implementation{conn: conn, catalogClient: client}
 
-	api.goodGet, err = client.GoodGet(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	api.goodList, err = client.GoodList(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	api.goodCreate, err = client.GoodCreate(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	api.goodUpdate, err = client.GoodUpdate(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	api.goodDelete, err = client.GoodDelete(ctx)
 	if err != nil {
 		return nil, err
 	}
