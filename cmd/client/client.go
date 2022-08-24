@@ -224,25 +224,6 @@ _cmd:
 				fmt.Println(err.Error())
 				continue
 			}
-		case "getCountryName":
-			params := strings.Split(line, " ")
-			if len(params) < 2 {
-				fmt.Printf("invalid args %d items <%v>", len(params), params)
-				continue
-			}
-			request := params[1]
-			for i, param := range params {
-				if i > 1 {
-					request = request + " " + param
-				} // для тестов с SQL
-			}
-			response, err := client.CountryGetByName(ctx, &pb.CountryByNameRequest{CountryName: request})
-			if err == nil {
-				fmt.Printf("response: [%v]", response.Country)
-			} else {
-				fmt.Println(err.Error())
-				continue
-			}
 		case "deleteCountry":
 			params := strings.Split(line, " ")
 			if len(params) != 2 {
