@@ -20,7 +20,6 @@ service catalog {
   rpc CountryList(google.protobuf.Empty) returns (CountryListResponse) {}
   rpc CountryUpdate(CountryUpdateRequest) returns (google.protobuf.Empty) {}
   rpc CountryDelete(CountryDeleteRequest) returns (google.protobuf.Empty) {}
-  rpc CountryGetByName(CountryByNameRequest) returns (CountryGetResponse) {}
 
   rpc UnitOfMeasureCreate(UnitOfMeasureCreateRequest) returns (google.protobuf.Empty) {}
   rpc UnitOfMeasureGet(UnitOfMeasureGetRequest) returns (UnitOfMeasureGetResponse) {}
@@ -100,11 +99,6 @@ service catalog_iface {
     };
   }
 
-   rpc CountryGetByName(CountryByNameRequest) returns (CountryGetResponse) {
-    option (google.api.http) = {
-      get: "/v1/country/name/{country_name}"
-    };
-  }
 
   /*
     UnitOfMeasure
@@ -271,15 +265,6 @@ message CountryGetResponse {
 message CountryDeleteRequest {
     uint32 country_id = 1;
 }
-
-// ---------------------------------------------------------------------------------------------------------------------
-// CountryGetByName
-// ---------------------------------------------------------------------------------------------------------------------
-
-message CountryByNameRequest {
-    string country_name = 1;
-}
-
 
 
 // ---------------------------------------------------------------------------------------------------------------------

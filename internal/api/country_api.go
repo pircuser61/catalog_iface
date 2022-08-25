@@ -34,10 +34,6 @@ func (api *Implementation) CountryGet(ctx context.Context, in *pb.CountryGetRequ
 	return api.catalogClient.CountryGet(ctx, in)
 }
 
-func (api *Implementation) CountryGetByName(ctx context.Context, in *pb.CountryByNameRequest) (*pb.CountryGetResponse, error) {
-	return api.catalogClient.CountryGetByName(ctx, in)
-}
-
 func validateCountry(country string) error {
 	if len(country) < 3 || len(country) > 20 {
 		return errors.Errorf("bad country <%v>", country)
