@@ -23,6 +23,8 @@ func main() {
 	client := pb.NewCatalogIfaceClient(conn)
 	ctx := context.Background()
 
+	go runErrListiner(ctx)
+
 	var line string
 	in := bufio.NewScanner(os.Stdin)
 

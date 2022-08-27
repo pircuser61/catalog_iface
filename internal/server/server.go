@@ -11,6 +11,7 @@ import (
 	pb "gitlab.ozon.dev/pircuser61/catalog_iface/api"
 	config "gitlab.ozon.dev/pircuser61/catalog_iface/config"
 	apiPkg "gitlab.ozon.dev/pircuser61/catalog_iface/internal/api"
+	apiKafkaPkg "gitlab.ozon.dev/pircuser61/catalog_iface/internal/api_grpc_kafka"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -23,8 +24,13 @@ func RunGRPC(ctx context.Context) {
 	if err != nil {
 		panic(err)
 	}
+	var apiImplementation pb.CatalogIfaceServer
+	if config.UseKafka {
+		apiImplementation, err = apiKafkaPkg.New(ctx)
+	} else {
+		apiImplementation, err = apiPkg.New(ctx)
+	}
 
-	apiImplementation, err := apiPkg.New(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -45,6 +51,7 @@ func RunREST(ctx context.Context) {
 	mux := http.NewServeMux()
 	mux.Handle("/swagger/", http.StripPrefix("/swagger", swaggerui.Handler(spec)))
 	mux.Handle("/", gwmux)
+
 	if err := http.ListenAndServe(config.HttpAddr, mux); err != nil {
 		panic(err)
 	}
