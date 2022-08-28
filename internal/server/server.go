@@ -3,11 +3,14 @@ package server
 import (
 	"context"
 	_ "embed"
+	_ "expvar"
 	"net"
 	"net/http"
 
 	"github.com/flowchartsman/swaggerui"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	otgrpc "github.com/opentracing-contrib/go-grpc"
+	"github.com/opentracing/opentracing-go"
 	pb "gitlab.ozon.dev/pircuser61/catalog_iface/api"
 	config "gitlab.ozon.dev/pircuser61/catalog_iface/config"
 	apiPkg "gitlab.ozon.dev/pircuser61/catalog_iface/internal/api"
@@ -34,7 +37,7 @@ func RunGRPC(ctx context.Context) {
 	if err != nil {
 		panic(err)
 	}
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(otgrpc.OpenTracingServerInterceptor(opentracing.GlobalTracer())))
 	pb.RegisterCatalogIfaceServer(grpcServer, apiImplementation)
 
 	if err = grpcServer.Serve(listener); err != nil {
@@ -51,6 +54,8 @@ func RunREST(ctx context.Context) {
 	mux := http.NewServeMux()
 	mux.Handle("/swagger/", http.StripPrefix("/swagger", swaggerui.Handler(spec)))
 	mux.Handle("/", gwmux)
+
+	mux.Handle("/debug/", http.DefaultServeMux)
 
 	if err := http.ListenAndServe(config.HttpAddr, mux); err != nil {
 		panic(err)

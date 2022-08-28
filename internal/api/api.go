@@ -4,6 +4,8 @@ import (
 	"context"
 	"sync"
 
+	otgrpc "github.com/opentracing-contrib/go-grpc"
+	"github.com/opentracing/opentracing-go"
 	pb "gitlab.ozon.dev/pircuser61/catalog_iface/api"
 	config "gitlab.ozon.dev/pircuser61/catalog_iface/config"
 	"google.golang.org/grpc"
@@ -20,7 +22,11 @@ type Implementation struct {
 }
 
 func New(ctx context.Context) (pb.CatalogIfaceServer, error) {
-	conn, err := grpc.Dial(config.GrpcStoreAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(config.GrpcStoreAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithUnaryInterceptor(
+			otgrpc.OpenTracingClientInterceptor(opentracing.GlobalTracer())),
+	)
 	if err != nil {
 		return nil, err
 	}
