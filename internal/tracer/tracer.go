@@ -12,7 +12,7 @@ import (
 func CreateTracer(serviceName string) (opentracing.Tracer, io.Closer, error) {
 	rc := &jaegerConfig.ReporterConfig{
 		LocalAgentHostPort: configPkg.JaegerHostPort,
-		LogSpans:           true,
+		LogSpans:           false,
 	}
 
 	sc := &jaegerConfig.SamplerConfig{

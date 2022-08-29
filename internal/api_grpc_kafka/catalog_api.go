@@ -9,7 +9,8 @@ import (
 	"github.com/pkg/errors"
 	pb "gitlab.ozon.dev/pircuser61/catalog_iface/api"
 	config "gitlab.ozon.dev/pircuser61/catalog_iface/config"
-	log "gitlab.ozon.dev/pircuser61/catalog_iface/internal/log"
+	logger "gitlab.ozon.dev/pircuser61/catalog_iface/internal/logger"
+	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -40,9 +41,11 @@ func (api *Implementation) GoodCreate(ctx context.Context, in *pb.GoodCreateRequ
 	})
 
 	if err != nil {
+		logger.Error("Kafka good get", zap.Error(err))
 		return nil, err
+	} else {
+		logger.Debug("Kafka good get", zap.Int32("Partition", part), zap.Int64("offset", offset))
 	}
-	log.Msgf("part: %d topic %s offset %d\n", part, config.Topic_create, offset)
 
 	return &emptypb.Empty{}, nil
 }
@@ -60,7 +63,6 @@ func (api *Implementation) GoodUpdate(ctx context.Context, in *pb.GoodUpdateRequ
 	if err != nil {
 		return nil, err
 	}
-
 	part, offset, err := api.syncProducer.SendMessage(&sarama.ProducerMessage{
 		Topic: config.Topic_update,
 		Key:   sarama.StringEncoder(good.Name),
@@ -68,9 +70,11 @@ func (api *Implementation) GoodUpdate(ctx context.Context, in *pb.GoodUpdateRequ
 	})
 
 	if err != nil {
+		logger.Error("Kafka good update", zap.Error(err))
 		return nil, err
+	} else {
+		logger.Debug("Kafka good update", zap.Int32("Partition", part), zap.Int64("offset", offset))
 	}
-	log.Msgf("part: %d topic %s offset %d\n", part, config.Topic_update, offset)
 
 	return &emptypb.Empty{}, nil
 }
@@ -82,7 +86,6 @@ func (api *Implementation) GoodDelete(ctx context.Context, in *pb.GoodDeleteRequ
 	if err != nil {
 		return nil, err
 	}
-
 	part, offset, err := api.syncProducer.SendMessage(&sarama.ProducerMessage{
 		Topic: config.Topic_delete,
 		Key:   sarama.StringEncoder(fmt.Sprint(code)),
@@ -90,9 +93,11 @@ func (api *Implementation) GoodDelete(ctx context.Context, in *pb.GoodDeleteRequ
 	})
 
 	if err != nil {
+		logger.Error("Kafka good delete", zap.Error(err))
 		return nil, err
+	} else {
+		logger.Debug("Kafka good delete", zap.Int32("Partition", part), zap.Int64("offset", offset))
 	}
-	log.Msgf("part: %d topic %s offset %d\n", part, config.Topic_delete, offset)
 	return &emptypb.Empty{}, nil
 }
 
