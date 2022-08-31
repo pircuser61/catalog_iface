@@ -9,14 +9,6 @@ import (
 )
 
 func (api *Implementation) GoodCreate(ctx context.Context, in *pb.GoodCreateRequest) (*emptypb.Empty, error) {
-	/* OpenTracingServerInterceptor - добавит свой спан
-	span, ctx := opentracing.StartSpanFromContext(ctx, "iface/good_create")
-	defer span.Finish()
-	span.LogKV("request", fmt.Sprintf("%s %s %s",
-		in.GetName(),
-		in.GetUnitOfMeasure(),
-		in.GetCountry()))
-	*/
 	if err := validate(api, in.GetName(), in.GetUnitOfMeasure(), in.GetCountry()); err != nil {
 		return nil, err
 	}
