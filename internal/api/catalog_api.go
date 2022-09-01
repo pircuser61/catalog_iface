@@ -5,23 +5,36 @@ import (
 
 	"github.com/pkg/errors"
 	pb "gitlab.ozon.dev/pircuser61/catalog_iface/api"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 func (api *Implementation) GoodCreate(ctx context.Context, in *pb.GoodCreateRequest) (*emptypb.Empty, error) {
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		ctx = metadata.NewOutgoingContext(ctx, md)
+	}
+
 	if err := validate(api, in.GetName(), in.GetUnitOfMeasure(), in.GetCountry()); err != nil {
 		return nil, err
 	}
-	if _, err := api.catalogClient.GoodCreate(ctx, in); err != nil {
+	var md metadata.MD
+	if _, err := api.catalogClient.GoodCreate(ctx, in, grpc.Header(&md)); err != nil {
 		return nil, err
 	}
+	grpc.SendHeader(ctx, md)
 	return &emptypb.Empty{}, nil
 }
 
 func (api *Implementation) GoodUpdate(ctx context.Context, in *pb.GoodUpdateRequest) (*emptypb.Empty, error) {
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		ctx = metadata.NewOutgoingContext(ctx, md)
+	}
+
 	if err := validate(api, in.Good.GetName(), in.Good.GetUnitOfMeasure(), in.Good.GetCountry()); err != nil {
 		return nil, err
 	}
+
 	if _, err := api.catalogClient.GoodUpdate(ctx, in); err != nil {
 		return nil, err
 	}

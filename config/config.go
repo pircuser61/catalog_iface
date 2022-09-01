@@ -12,6 +12,10 @@ const (
 	Topic_error  = "errors"
 
 	JaegerHostPort = "localhost:6831"
+
+	RedisAddr       = "localhost:6379"
+	RedisResponseDb = 1
+	RedisPassword   = ""
 )
 
 var (

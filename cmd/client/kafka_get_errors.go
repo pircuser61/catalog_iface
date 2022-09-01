@@ -23,7 +23,7 @@ func (c *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim saram
 	for {
 		select {
 		case <-session.Context().Done():
-			fmt.Println("Error's done")
+			fmt.Println("Error's session context done")
 			return nil
 		case msg, ok := <-claim.Messages():
 			if !ok {

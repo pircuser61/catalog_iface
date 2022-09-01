@@ -2,7 +2,9 @@
 /.vscode
 /.vendor
 api/google
-#.gitignore 
 *exe
 *exe~
 launch.json
+client.bat
+cd.bat
+.gitignore
