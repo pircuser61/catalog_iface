@@ -21,7 +21,6 @@ func (api *Implementation) GoodCreate(ctx context.Context, in *pb.GoodCreateRequ
 func (api *Implementation) GoodUpdate(ctx context.Context, in *pb.GoodUpdateRequest) (*emptypb.Empty, error) {
 	if err := validate(api, in.Good.GetName(), in.Good.GetUnitOfMeasure(), in.Good.GetCountry()); err != nil {
 		return nil, err
-
 	}
 	if _, err := api.catalogClient.GoodUpdate(ctx, in); err != nil {
 		return nil, err
@@ -37,17 +36,16 @@ func (api *Implementation) GoodDelete(ctx context.Context, in *pb.GoodDeleteRequ
 }
 
 func (api *Implementation) GoodGet(ctx context.Context, in *pb.GoodGetRequest) (*pb.GoodGetResponse, error) {
-	return api.catalogClient.GoodGet(ctx, in)
+	result, err := api.catalogClient.GoodGet(ctx, in)
+	return result, err
 }
 
 func (api *Implementation) GoodList(ctx context.Context, in *pb.GoodListRequest) (*pb.GoodListResponse, error) {
 	api.goodListMu.Lock()
 	defer api.goodListMu.Unlock()
-
 	if err := api.goodList.Send(in); err != nil {
 		return nil, err
 	}
-
 	result, err := api.goodList.Recv()
 	if err != nil {
 		return nil, err
